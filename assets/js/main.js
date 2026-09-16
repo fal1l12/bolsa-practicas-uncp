@@ -1,4 +1,4 @@
-const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/TU_WEBHOOK_AQUI';
+const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1549798852226457802/H2oRBKyuhCcdPsgukxpKnyebmh6pRLRMdPV9k31Lsu3I5k6bETqVgRlRM07-uLyS6mIN';
 
 document.addEventListener('DOMContentLoaded', function () {
     const navToggle = document.getElementById('navToggle');
