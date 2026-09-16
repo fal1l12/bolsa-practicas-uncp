@@ -27,6 +27,7 @@
 
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="icon" type="image/png" href="assets/img/favicon-uncp.png">
     <meta name="google-site-verification" content="google27f7839f16973fc6.html">
 
@@ -69,6 +70,16 @@
     </script>
 </head>
 <body>
+    <!-- Dark Mode Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop" aria-label="Volver arriba">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -84,6 +95,7 @@
                 <li><a href="#requisitos">Requisitos</a></li>
                 <li><a href="#faq">FAQ</a></li>
                 <li><a href="#postular">Postular</a></li>
+                <li><a href="#admin" class="nav-admin-link"><i class="fas fa-lock"></i> Admin</a></li>
             </ul>
             <button class="nav-toggle" id="navToggle">
                 <i class="fas fa-bars"></i>
@@ -98,22 +110,90 @@
             <h1>Programa de Prácticas Preprofesionales</h1>
             <p class="hero-subtitle">Universidad Nacional del Centro del Perú — OTI</p>
             <p class="hero-desc">Únete a nuestro equipo de tecnología. Desarrolla tus habilidades en un entorno real de trabajo junto a profesionales de la industria.</p>
+            <div class="hero-countdown" id="heroCountdown">
+                <div class="countdown-item">
+                    <span class="countdown-number" id="cdDays">00</span>
+                    <span class="countdown-label">Días</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="cdHours">00</span>
+                    <span class="countdown-label">Horas</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="cdMinutes">00</span>
+                    <span class="countdown-label">Min</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="cdSeconds">00</span>
+                    <span class="countdown-label">Seg</span>
+                </div>
+            </div>
+            <p class="hero-deadline-text">Tiempo restante para postular</p>
             <a href="#postular" class="hero-btn">Postular Ahora <i class="fas fa-arrow-right"></i></a>
+            <div class="hero-share">
+                <span>Compartir:</span>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=https://fal1l12.github.io/bolsa-practicas-uncp/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://twitter.com/intent/tweet?url=https://fal1l12.github.io/bolsa-practicas-uncp/&text=Convocatoria%20Prácticas%20OTI%20UNCP%202026" target="_blank" rel="noopener" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="https://wa.me/?text=Convocatoria%20Prácticas%20OTI%20UNCP%202026%20https://fal1l12.github.io/bolsa-practicas-uncp/" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://t.me/share/url?url=https://fal1l12.github.io/bolsa-practicas-uncp/&text=Convocatoria%20Prácticas%20OTI%20UNCP%202026" target="_blank" rel="noopener" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+            </div>
         </div>
     </section>
 
     <main class="main-content">
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card animate-on-scroll">
+                    <div class="stat-icon"><i class="fas fa-briefcase"></i></div>
+                    <div class="stat-number" data-target="9">0</div>
+                    <div class="stat-label">Vacantes Totales</div>
+                </div>
+                <div class="stat-card animate-on-scroll">
+                    <div class="stat-icon"><i class="fas fa-building"></i></div>
+                    <div class="stat-number" data-target="3">0</div>
+                    <div class="stat-label">Áreas Disponibles</div>
+                </div>
+                <div class="stat-card animate-on-scroll">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-number" data-target="0" id="statPostulantes">0</div>
+                    <div class="stat-label">Postulantes</div>
+                </div>
+                <div class="stat-card animate-on-scroll">
+                    <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                    <div class="stat-number">S/</div>
+                    <div class="stat-label">Beneficio Económico</div>
+                </div>
+            </div>
+        </section>
+
         <section class="section" id="ofertas">
             <div class="section-header">
                 <h2>Ofertas de Práctica Disponibles</h2>
                 <p>Selecciona el área que mejor se adapte a tu perfil profesional</p>
             </div>
-            <div class="offers-grid">
-                <div class="offer-card" data-area="soporte">
+
+            <!-- Search and Filter -->
+            <div class="search-filter-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar área de práctica...">
+                    <button class="search-clear" id="searchClear"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">Todas</button>
+                    <button class="filter-btn" data-filter="soporte">Soporte</button>
+                    <button class="filter-btn" data-filter="redes">Redes</button>
+                    <button class="filter-btn" data-filter="desarrollo">Desarrollo</button>
+                </div>
+            </div>
+
+            <div class="offers-grid" id="offersGrid">
+                <div class="offer-card animate-on-scroll" data-area="soporte">
                     <div class="card-icon">
                         <i class="fas fa-headset"></i>
                     </div>
-                    <div class="card-badge">3 vacantes</div>
+                    <div class="card-badge" id="badge-soporte">3 vacantes</div>
                     <h3>Soporte Técnico</h3>
                     <p class="card-location"><i class="fas fa-map-marker-alt"></i> Sede Central - Piso 2</p>
                     <p class="card-desc">Brindar soporte técnico presencial y remoto a usuarios del sistema universitario. Instalación y mantenimiento de equipos.</p>
@@ -122,17 +202,23 @@
                         <span>Linux</span>
                         <span>Help Desk</span>
                     </div>
+                    <div class="card-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-soporte" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progress-text-soporte">0/3 postulantes</span>
+                    </div>
                     <div class="card-footer">
                         <span class="card-salary"><i class="fas fa-coins"></i> Beneficio Económico</span>
                         <button class="btn-card" onclick="openModal('soporte')">Postular</button>
                     </div>
                 </div>
 
-                <div class="offer-card" data-area="redes">
+                <div class="offer-card animate-on-scroll" data-area="redes">
                     <div class="card-icon">
                         <i class="fas fa-network-wired"></i>
                     </div>
-                    <div class="card-badge">2 vacantes</div>
+                    <div class="card-badge" id="badge-redes">2 vacantes</div>
                     <h3>Redes y Telecomunicaciones</h3>
                     <p class="card-location"><i class="fas fa-map-marker-alt"></i> Data Center - Sótano</p>
                     <p class="card-desc">Gestión y administración de infraestructura de red. Monitoreo, configuración de switches, routers y firewalls.</p>
@@ -141,17 +227,23 @@
                         <span>FortiGate</span>
                         <span>MikroTik</span>
                     </div>
+                    <div class="card-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-redes" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progress-text-redes">0/2 postulantes</span>
+                    </div>
                     <div class="card-footer">
                         <span class="card-salary"><i class="fas fa-coins"></i> Beneficio Económico</span>
                         <button class="btn-card" onclick="openModal('redes')">Postular</button>
                     </div>
                 </div>
 
-                <div class="offer-card" data-area="desarrollo">
+                <div class="offer-card animate-on-scroll" data-area="desarrollo">
                     <div class="card-icon">
                         <i class="fas fa-code"></i>
                     </div>
-                    <div class="card-badge">4 vacantes</div>
+                    <div class="card-badge" id="badge-desarrollo">4 vacantes</div>
                     <h3>Desarrollo de Software</h3>
                     <p class="card-location"><i class="fas fa-map-marker-alt"></i> Laboratorio de Sistemas</p>
                     <p class="card-desc">Desarrollo de sistemas web y móviles para procesos internos de la universidad. Trabajo en equipo ágil.</p>
@@ -159,6 +251,12 @@
                         <span>Python</span>
                         <span>JavaScript</span>
                         <span>MySQL</span>
+                    </div>
+                    <div class="card-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-desarrollo" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progress-text-desarrollo">0/4 postulantes</span>
                     </div>
                     <div class="card-footer">
                         <span class="card-salary"><i class="fas fa-coins"></i> Beneficio Económico</span>
@@ -174,22 +272,22 @@
                 <p>Asegúrate de cumplir con todos los requisitos antes de postular</p>
             </div>
             <div class="requirements-grid">
-                <div class="req-card">
+                <div class="req-card animate-on-scroll">
                     <div class="req-icon"><i class="fas fa-user-graduate"></i></div>
                     <h4>Estudiante Regular</h4>
                     <p>Estar matriculado en el periodo académico vigente en la carrera de Ingeniería de Sistemas o afines.</p>
                 </div>
-                <div class="req-card">
+                <div class="req-card animate-on-scroll">
                     <div class="req-icon"><i class="fas fa-calendar-check"></i></div>
                     <h4>Ciclo Mínimo</h4>
                     <p>Haber aprobado como mínimo el sexto (6°) ciclo de estudios universitarios.</p>
                 </div>
-                <div class="req-card">
+                <div class="req-card animate-on-scroll">
                     <div class="req-icon"><i class="fas fa-file-alt"></i></div>
                     <h4>Documentación</h4>
                     <p>CV actualizado, constancia de matrícula, certificado de studies y carta de compromiso.</p>
                 </div>
-                <div class="req-card">
+                <div class="req-card animate-on-scroll">
                     <div class="req-icon"><i class="fas fa-clock"></i></div>
                     <h4>Disponibilidad</h4>
                     <p>Disponibilidad de al menos 20 horas semanales para actividades de práctica.</p>
@@ -242,33 +340,62 @@
                         <span class="error-message" id="error-correo"></span>
                     </div>
 
-                    <div class="form-group">
-                        <label for="ciclo"><i class="fas fa-graduation-cap"></i> Ciclo Actual *</label>
-                        <select id="ciclo" name="ciclo" required>
-                            <option value="">Seleccione su ciclo</option>
-                            <option value="6">6° Ciclo</option>
-                            <option value="7">7° Ciclo</option>
-                            <option value="8">8° Ciclo</option>
-                            <option value="9">9° Ciclo</option>
-                            <option value="10">10° Ciclo</option>
-                        </select>
-                        <span class="error-message" id="error-ciclo"></span>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ciclo"><i class="fas fa-graduation-cap"></i> Ciclo Actual *</label>
+                            <select id="ciclo" name="ciclo" required>
+                                <option value="">Seleccione su ciclo</option>
+                                <option value="6">6° Ciclo</option>
+                                <option value="7">7° Ciclo</option>
+                                <option value="8">8° Ciclo</option>
+                                <option value="9">9° Ciclo</option>
+                                <option value="10">10° Ciclo</option>
+                            </select>
+                            <span class="error-message" id="error-ciclo"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="area"><i class="fas fa-briefcase"></i> Área de Práctica *</label>
+                            <select id="area" name="area" required>
+                                <option value="">Seleccione un área</option>
+                                <option value="soporte">Soporte Técnico</option>
+                                <option value="redes">Redes y Telecomunicaciones</option>
+                                <option value="desarrollo">Desarrollo de Software</option>
+                            </select>
+                            <span class="error-message" id="error-area"></span>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="area"><i class="fas fa-briefcase"></i> Área de Práctica *</label>
-                        <select id="area" name="area" required>
-                            <option value="">Seleccione un área</option>
-                            <option value="soporte">Soporte Técnico</option>
-                            <option value="redes">Redes y Telecomunicaciones</option>
-                            <option value="desarrollo">Desarrollo de Software</option>
-                        </select>
-                        <span class="error-message" id="error-area"></span>
+                        <label for="cv"><i class="fas fa-file-pdf"></i> CV (PDF, máx. 5MB)</label>
+                        <div class="file-upload" id="fileUploadArea">
+                            <input type="file" id="cv" name="cv" accept=".pdf" class="file-input">
+                            <div class="file-upload-content">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Arrastra tu CV aquí o <span class="file-browse">buscar archivo</span></p>
+                                <span class="file-hint">Solo archivos PDF (máx. 5MB)</span>
+                            </div>
+                            <div class="file-preview" id="filePreview" style="display:none;">
+                                <i class="fas fa-file-pdf file-preview-icon"></i>
+                                <span class="file-name" id="fileName"></span>
+                                <span class="file-size" id="fileSize"></span>
+                                <button type="button" class="file-remove" id="fileRemove"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <span class="error-message" id="error-cv"></span>
                     </div>
 
                     <div class="form-group">
                         <label for="contrasena"><i class="fas fa-lock"></i> Contraseña del Sistema *</label>
-                        <input type="password" id="contrasena" name="contrasena" placeholder="Mínimo 8 caracteres" required>
+                        <div class="password-wrapper">
+                            <input type="password" id="contrasena" name="contrasena" placeholder="Mínimo 8 caracteres" required>
+                            <button type="button" class="password-toggle" id="passwordToggle">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength" id="passwordStrength">
+                            <div class="strength-bar" id="strengthBar"></div>
+                        </div>
+                        <span class="strength-text" id="strengthText"></span>
                         <span class="error-message" id="error-contrasena"></span>
                     </div>
 
@@ -294,30 +421,113 @@
                 <p>Resolvemos tus dudas sobre el proceso de postulación</p>
             </div>
             <div class="faq-container">
-                <details class="faq-item">
+                <details class="faq-item animate-on-scroll">
                     <summary>¿Quiénes pueden postular a las prácticas en la OTI UNCP?</summary>
                     <p>Pueden postular estudiantes de Ingeniería de Sistemas o carreras afines que se encuentren matriculados en el periodo académico vigente, habiendo aprobado como mínimo el sexto (6°) ciclo de estudios universitarios.</p>
                 </details>
-                <details class="faq-item">
+                <details class="faq-item animate-on-scroll">
                     <summary>¿Cuáles son las áreas disponibles para prácticas?</summary>
                     <p>Contamos con tres áreas: Soporte Técnico (3 vacantes), Redes y Telecomunicaciones (2 vacantes) y Desarrollo de Software (4 vacantes). Cada área ofrece experiencia práctica en un entorno real de trabajo.</p>
                 </details>
-                <details class="faq-item">
+                <details class="faq-item animate-on-scroll">
                     <summary>¿Cuántas horas semanales debo disponer?</summary>
                     <p>Se requiere una disponibilidad mínima de 20 horas semanales para poder cumplir con las actividades asignadas en cada área de práctica.</p>
                 </details>
-                <details class="faq-item">
+                <details class="faq-item animate-on-scroll">
                     <summary>¿Qué documentos necesito para postular?</summary>
                     <p>Debes presentar: CV actualizado, constancia de matrícula vigente, certificado de studies y carta de compromiso. Todos los documentos se suben a través del formulario de postulación digital.</p>
                 </details>
-                <details class="faq-item">
+                <details class="faq-item animate-on-scroll">
                     <summary>¿Las prácticas son remuneradas?</summary>
                     <p>Sí, los practicantes reciben un beneficio económico durante el periodo de práctica preprofesional en la OTI UNCP.</p>
                 </details>
-                <details class="faq-item">
+                <details class="faq-item animate-on-scroll">
                     <summary>¿Cómo me contactarán después de postular?</summary>
                     <p>Recibirás un correo de confirmación en tu dirección institucional @uncp.edu.pe. El equipo de la OTI se pondrá en contacto contigo para coordinar la entrevista y el proceso de selección.</p>
                 </details>
+            </div>
+        </section>
+
+        <!-- Map Section -->
+        <section class="section" id="ubicacion">
+            <div class="section-header">
+                <h2>Ubicación</h2>
+                <p>Encuéntranos en la Universidad Nacional del Centro del Perú</p>
+            </div>
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+        </section>
+
+        <!-- Admin Section -->
+        <section class="section section-alt" id="admin">
+            <div class="section-header">
+                <h2><i class="fas fa-lock"></i> Panel de Administración</h2>
+                <p>Ingrese la contraseña de administrador para ver las postulaciones</p>
+            </div>
+            <div class="admin-container">
+                <div class="admin-login" id="adminLogin">
+                    <div class="admin-lock">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <input type="password" id="adminPassword" placeholder="Contraseña de administrador" class="admin-input">
+                    <button class="btn-submit" id="adminLoginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Acceder
+                    </button>
+                    <span class="error-message" id="error-admin"></span>
+                </div>
+                <div class="admin-panel" id="adminPanel" style="display:none;">
+                    <div class="admin-header">
+                        <h3><i class="fas fa-table"></i> Postulaciones Registradas</h3>
+                        <div class="admin-actions">
+                            <select id="adminFilter" class="admin-select">
+                                <option value="all">Todas las áreas</option>
+                                <option value="soporte">Soporte Técnico</option>
+                                <option value="redes">Redes y Telecomunicaciones</option>
+                                <option value="desarrollo">Desarrollo de Software</option>
+                            </select>
+                            <button class="btn-export" id="exportBtn"><i class="fas fa-download"></i> Exportar CSV</button>
+                            <button class="btn-export btn-clear" id="clearDataBtn"><i class="fas fa-trash"></i> Limpiar Datos</button>
+                        </div>
+                    </div>
+                    <div class="admin-stats">
+                        <div class="admin-stat">
+                            <span class="admin-stat-num" id="adminTotal">0</span>
+                            <span class="admin-stat-label">Total</span>
+                        </div>
+                        <div class="admin-stat">
+                            <span class="admin-stat-num" id="adminSoporte">0</span>
+                            <span class="admin-stat-label">Soporte</span>
+                        </div>
+                        <div class="admin-stat">
+                            <span class="admin-stat-num" id="adminRedes">0</span>
+                            <span class="admin-stat-label">Redes</span>
+                        </div>
+                        <div class="admin-stat">
+                            <span class="admin-stat-num" id="adminDesarrollo">0</span>
+                            <span class="admin-stat-label">Desarrollo</span>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nombre</th>
+                                    <th>DNI</th>
+                                    <th>Correo</th>
+                                    <th>Área</th>
+                                    <th>Ciclo</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminTableBody">
+                                <tr><td colspan="8" class="empty-state">No hay postulaciones registradas</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -328,6 +538,11 @@
                 <img src="assets/img/logo-uncp.png" alt="Logo UNCP" class="footer-logo">
                 <h4>UNCP - OTI</h4>
                 <p>Oficina de Tecnologías de la Información<br>Universidad Nacional del Centro del Perú</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
             </div>
             <div class="footer-section">
                 <h4>Contacto</h4>
@@ -355,6 +570,23 @@
         </div>
     </div>
 
+    <!-- Confirm Delete Modal -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeConfirmModal()"><i class="fas fa-times"></i></button>
+            <div class="modal-icon error">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3>¿Confirmar eliminación?</h3>
+            <p id="confirmMessage">¿Estás seguro de que deseas eliminar este registro? Esta acción no se puede deshacer.</p>
+            <div class="modal-actions">
+                <button class="modal-btn-secondary" onclick="closeConfirmModal()">Cancelar</button>
+                <button class="modal-btn-danger" id="confirmDeleteBtn">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
 </html>
