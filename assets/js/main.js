@@ -782,7 +782,7 @@ function closeConfirmModal() {
 }
 
 function exportCSV() {
-    if (applicants.length === 0) {
+if (applicants.length === 0) {
         showModal('error', 'Sin datos', 'No hay postulaciones para exportar');
         return;
     }
