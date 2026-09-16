@@ -1,2 +1,13 @@
 User-agent: *
 Allow: /
+Disallow: /assets/js/
+
+Sitemap: https://fal1l12.github.io/bolsa-practicas-uncp/sitemap.xml
+
+# Googlebot
+User-agent: Googlebot
+Allow: /
+
+# Bingbot
+User-agent: Bingbot
+Allow: /
