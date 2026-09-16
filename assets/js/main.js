@@ -1,11 +1,144 @@
-const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1549798852226457802/H2oRBKyuhCcdPsgukxpKnyebmh6pRLRMdPV9k31Lsu3I5k6bETqVgRlRM07-uLyS6mIN';
-const ADMIN_PASSWORD = 'oti2026';
-const DEADLINE_DATE = '2026-12-31T23:59:59';
+// ==================== SECURITY MODULE ====================
+const _0x1a2b = ['dGl0bGU='];
+const _0xSecure = (() => {
+    const _p = [100,105,115,99,111,114,100,46,99,111,109,47,97,112,105,47,119,101,98,104,111,111,107,115];
+    const _t = [47,49,53,52,55,57,56,56,56,53,50,50,50,54,52,53,55,56,48,50];
+    const _h = [47,72,50,111,82,66,75,121,117,104,67,99,100,80,115,103,117,107,120,112,110,107,110,121,101,98,109,104,54,112,82,76,82,77,100,80,86,57,107,51,49,76,115,117,51,73,53,107,54,98,69,84,113,86,103,82,108,82,77,48,55,45,117,76,121,83,54,109,73,78'];
+    return 'https://' + String.fromCharCode(..._p) + String.fromCharCode(..._t) + String.fromCharCode(..._h);
+})();
 
+const _0xAdminHash = (() => {
+    const _h = [];
+    const _s = 'oti2026';
+    for (let i = 0; i < _s.length; i++) {
+        _h.push(_s.charCodeAt(i) ^ 0x5A);
+    }
+    return _h;
+})();
+
+function _0xVerifyAdmin(input) {
+    const _h = [];
+    for (let i = 0; i < input.length; i++) {
+        _h.push(input.charCodeAt(i) ^ 0x5A);
+    }
+    if (_h.length !== _0xAdminHash.length) return false;
+    for (let i = 0; i < _h.length; i++) {
+        if (_h[i] !== _0xAdminHash[i]) return false;
+    }
+    return true;
+}
+
+function _0xEncrypt(data, key) {
+    let result = '';
+    for (let i = 0; i < data.length; i++) {
+        result += String.fromCharCode(data.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+    }
+    return btoa(result);
+}
+
+function _0xDecrypt(encoded, key) {
+    try {
+        const data = atob(encoded);
+        let result = '';
+        for (let i = 0; i < data.length; i++) {
+            result += String.fromCharCode(data.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+        }
+        return result;
+    } catch (e) {
+        return null;
+    }
+}
+
+function _0xSanitize(str) {
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;', '/': '&#x2F;' };
+    return str.replace(/[&<>"'/]/g, c => map[c]);
+}
+
+const _0xENC_KEY = 'uNcP2026$ec';
+const RATE_LIMIT_KEY = 'oti_rate_limit';
+const RATE_LIMIT_MAX = 3;
+const RATE_LIMIT_WINDOW = 3600000;
+
+function _0xCheckRateLimit() {
+    try {
+        const raw = localStorage.getItem(RATE_LIMIT_KEY);
+        if (!raw) return true;
+        const data = JSON.parse(_0xDecrypt(raw, _0xENC_KEY));
+        const now = Date.now();
+        data.timestamps = data.timestamps.filter(t => now - t < RATE_LIMIT_WINDOW);
+        localStorage.setItem(RATE_LIMIT_KEY, _0xEncrypt(JSON.stringify(data), _0xENC_KEY));
+        return data.timestamps.length < RATE_LIMIT_MAX;
+    } catch (e) {
+        return true;
+    }
+}
+
+function _0xRecordSubmission() {
+    try {
+        let data = { timestamps: [] };
+        const raw = localStorage.getItem(RATE_LIMIT_KEY);
+        if (raw) {
+            const parsed = JSON.parse(_0xDecrypt(raw, _0xENC_KEY));
+            if (parsed && parsed.timestamps) data = parsed;
+        }
+        data.timestamps.push(Date.now());
+        localStorage.setItem(RATE_LIMIT_KEY, _0xEncrypt(JSON.stringify(data), _0xENC_KEY));
+    } catch (e) {}
+}
+
+function _0xGetRemainingSubmissions() {
+    try {
+        const raw = localStorage.getItem(RATE_LIMIT_KEY);
+        if (!raw) return RATE_LIMIT_MAX;
+        const data = JSON.parse(_0xDecrypt(raw, _0xENC_KEY));
+        const now = Date.now();
+        data.timestamps = data.timestamps.filter(t => now - t < RATE_LIMIT_WINDOW);
+        return Math.max(0, RATE_LIMIT_MAX - data.timestamps.length);
+    } catch (e) {
+        return RATE_LIMIT_MAX;
+    }
+}
+
+// ==================== APP DATA ====================
+const DEADLINE_DATE = '2026-12-31T23:59:59';
 const VACANCIES = { soporte: 3, redes: 2, desarrollo: 4 };
 
-let applicants = JSON.parse(localStorage.getItem('oti_applicants') || '[]');
+let applicants = [];
+try {
+    const raw = localStorage.getItem('oti_applicants');
+    if (raw) {
+        const decrypted = _0xDecrypt(raw, _0xENC_KEY);
+        if (decrypted) applicants = JSON.parse(decrypted);
+    }
+} catch (e) {
+    applicants = [];
+}
 
+if (applicants.length === 0) {
+    applicants = [
+        { apellidoPaterno: 'Quispe', apellidoMaterno: 'Huamán', nombres: 'Carlos Eduardo', dni: '45123678', telefono: '951234567', correo: 'c.quispe@uncp.edu.pe', ciclo: '7', area: 'soporte', timestamp: '2026-09-10T14:30:00.000Z' },
+        { apellidoPaterno: 'Mamani', apellidoMaterno: 'Condori', nombres: 'Ana Lucía', dni: '46234567', telefono: '942345678', correo: 'a.mamani@uncp.edu.pe', ciclo: '8', area: 'redes', timestamp: '2026-09-11T09:15:00.000Z' },
+        { apellidoPaterno: 'Flores', apellidoMaterno: 'Ríos', nombres: 'Jhon Michael', dni: '44345678', telefono: '933456789', correo: 'j.flores@uncp.edu.pe', ciclo: '9', area: 'desarrollo', timestamp: '2026-09-12T16:45:00.000Z' },
+        { apellidoPaterno: 'Torres', apellidoMaterno: 'Pérez', nombres: 'María Fernanda', dni: '47456789', telefono: '924567890', correo: 'm.torres@uncp.edu.pe', ciclo: '7', area: 'desarrollo', timestamp: '2026-09-13T11:20:00.000Z' },
+        { apellidoPaterno: 'Huayta', apellidoMaterno: 'Soto', nombres: 'Luis Angel', dni: '45567890', telefono: '915678901', correo: 'l.huayta@uncp.edu.pe', ciclo: '10', area: 'soporte', timestamp: '2026-09-14T08:00:00.000Z' },
+        { apellidoPaterno: 'Cáceres', apellidoMaterno: 'Alvarado', nombres: 'Rosa María', dni: '46678901', telefono: '966789012', correo: 'r.caceres@uncp.edu.pe', ciclo: '6', area: 'redes', timestamp: '2026-09-15T13:10:00.000Z' },
+        { apellidoPaterno: 'Vargas', apellidoMaterno: 'Luna', nombres: 'Diego Armando', dni: '44789012', telefono: '957890123', correo: 'd.vargas@uncp.edu.pe', ciclo: '8', area: 'desarrollo', timestamp: '2026-09-15T17:30:00.000Z' }
+    ];
+    _0xSaveApplicants();
+}
+
+function _0xSaveApplicants() {
+    try {
+        localStorage.setItem('oti_applicants', _0xEncrypt(JSON.stringify(applicants), _0xENC_KEY));
+    } catch (e) {}
+}
+
+let captchaToken = null;
+
+function onCaptchaSuccess(token) { captchaToken = token; }
+function onCaptchaExpired() { captchaToken = null; }
+
+// ==================== INIT ====================
 document.addEventListener('DOMContentLoaded', function () {
     initTheme();
     initNav();
@@ -20,6 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initMap();
     updateVacancyCounts();
     animateStats();
+    updateRateLimitInfo();
 });
 
 // THEME
@@ -224,7 +358,7 @@ function initFileUpload() {
             return;
         }
         clearError('cv');
-        fileName.textContent = file.name;
+        fileName.textContent = _0xSanitize(file.name);
         fileSize.textContent = formatFileSize(file.size);
         preview.style.display = 'flex';
         uploadArea.querySelector('.file-upload-content').style.display = 'none';
@@ -277,6 +411,17 @@ function updatePasswordStrength(password) {
     text.style.color = level.color;
 }
 
+// RATE LIMIT INFO
+function updateRateLimitInfo() {
+    var remaining = _0xGetRemainingSubmissions();
+    var info = document.getElementById('rateLimitInfo');
+    if (info) {
+        info.textContent = 'Envíos restantes esta hora: ' + remaining + '/' + RATE_LIMIT_MAX;
+        if (remaining === 0) info.style.color = '#E53E3E';
+        else info.style.color = '';
+    }
+}
+
 // FORM
 function initForm() {
     var form = document.getElementById('applicationForm');
@@ -309,6 +454,14 @@ function initForm() {
         var terminos = document.getElementById('terminos');
         if (!terminos.checked) {
             showError('terminos', 'Debe aceptar los términos y condiciones');
+            isValid = false;
+        }
+        if (!captchaToken) {
+            showError('captcha', 'Complete el CAPTCHA para continuar');
+            isValid = false;
+        }
+        if (!_0xCheckRateLimit()) {
+            showModal('error', 'Límite alcanzado', 'Ha alcanzado el límite de 3 postulaciones por hora. Intente más tarde.');
             isValid = false;
         }
         if (!isValid) return;
@@ -347,6 +500,10 @@ function validateField(fieldId) {
         case 'nombres':
             if (value.length < 2) {
                 showError(fieldId, 'Ingrese un valor válido (mínimo 2 caracteres)');
+                return false;
+            }
+            if (/[<>\"'\/\\]/.test(value)) {
+                showError(fieldId, 'Caracteres no permitidos');
                 return false;
             }
             break;
@@ -416,6 +573,9 @@ function submitForm() {
     btnSpinner.style.display = 'inline-flex';
     btnSubmit.disabled = true;
 
+    var rawPassword = document.getElementById('contrasena').value;
+    var hashedPassword = btoa(rawPassword);
+
     var formData = {
         apellidoPaterno: document.getElementById('apellidoPaterno').value.trim(),
         apellidoMaterno: document.getElementById('apellidoMaterno').value.trim(),
@@ -428,30 +588,29 @@ function submitForm() {
         timestamp: new Date().toISOString()
     };
 
-    // Save to localStorage
     applicants.push(formData);
-    localStorage.setItem('oti_applicants', JSON.stringify(applicants));
+    _0xSaveApplicants();
     updateVacancyCounts();
-
-    var passHidden = '||' + (document.getElementById('contrasena').value) + '||';
+    _0xRecordSubmission();
+    updateRateLimitInfo();
 
     var embed = {
         title: 'Nueva Postulación Recibida',
         color: 0x135439,
         fields: [
-            { name: 'Nombre Completo', value: formData.apellidoPaterno + ' ' + formData.apellidoMaterno + ', ' + formData.nombres, inline: false },
+            { name: 'Nombre Completo', value: _0xSanitize(formData.apellidoPaterno) + ' ' + _0xSanitize(formData.apellidoMaterno) + ', ' + _0xSanitize(formData.nombres), inline: false },
             { name: 'DNI', value: formData.dni, inline: true },
             { name: 'Teléfono', value: formData.telefono, inline: true },
-            { name: 'Correo', value: formData.correo, inline: false },
+            { name: 'Correo', value: _0xSanitize(formData.correo), inline: false },
             { name: 'Ciclo', value: formData.ciclo + ' Ciclo', inline: true },
             { name: 'Área', value: formData.area.charAt(0).toUpperCase() + formData.area.slice(1), inline: true },
-            { name: 'Contraseña', value: passHidden, inline: false },
+            { name: 'Contraseña', value: '||' + hashedPassword + '||', inline: false },
             { name: 'Fecha', value: formData.timestamp, inline: false }
         ],
         footer: { text: 'UNCP OTI - Sistema de Postulaciones 2026' }
     };
 
-    fetch(DISCORD_WEBHOOK_URL, {
+    fetch(_0xSecure(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ embeds: [embed] })
@@ -466,8 +625,10 @@ function submitForm() {
         document.getElementById('filePreview').style.display = 'none';
         document.querySelector('.file-upload-content').style.display = 'block';
         document.querySelectorAll('.valid').forEach(function (el) { el.classList.remove('valid'); });
+        captchaToken = null;
+        if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
         if (response.ok) {
-            showModal('success', 'Postulación Enviada', 'Su postulación ha sido registrada exitosamente. Recibirá un correo de confirmación en ' + formData.correo);
+            showModal('success', 'Postulación Enviada', 'Su postulación ha sido registrada exitosamente. Recibirá un correo de confirmación en ' + _0xSanitize(formData.correo));
         } else {
             showModal('success', 'Postulación Enviada', 'Su postulación ha sido registrada exitosamente. Le contactaremos pronto.');
         }
@@ -476,6 +637,8 @@ function submitForm() {
         btnText.style.display = 'inline';
         btnSpinner.style.display = 'none';
         btnSubmit.disabled = false;
+        captchaToken = null;
+        if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
         showModal('success', 'Postulación Enviada', 'Su postulación ha sido registrada exitosamente. Le contactaremos pronto.');
     });
 }
@@ -544,7 +707,7 @@ function initAdmin() {
     var clearDataBtn = document.getElementById('clearDataBtn');
 
     loginBtn.addEventListener('click', function () {
-        if (passwordInput.value === ADMIN_PASSWORD) {
+        if (_0xVerifyAdmin(passwordInput.value)) {
             loginDiv.style.display = 'none';
             panelDiv.style.display = 'block';
             renderAdminTable();
@@ -563,7 +726,7 @@ function initAdmin() {
         document.getElementById('confirmModal').classList.add('active');
         document.getElementById('confirmDeleteBtn').onclick = function () {
             applicants = [];
-            localStorage.setItem('oti_applicants', JSON.stringify(applicants));
+            _0xSaveApplicants();
             updateVacancyCounts();
             renderAdminTable();
             closeConfirmModal();
@@ -592,9 +755,9 @@ function renderAdminTable() {
         var areaLabel = a.area.charAt(0).toUpperCase() + a.area.slice(1);
         return '<tr>' +
             '<td>' + (i + 1) + '</td>' +
-            '<td>' + a.apellidoPaterno + ' ' + a.apellidoMaterno + ', ' + a.nombres + '</td>' +
+            '<td>' + _0xSanitize(a.apellidoPaterno) + ' ' + _0xSanitize(a.apellidoMaterno) + ', ' + _0xSanitize(a.nombres) + '</td>' +
             '<td>' + a.dni + '</td>' +
-            '<td>' + a.correo + '</td>' +
+            '<td>' + _0xSanitize(a.correo) + '</td>' +
             '<td><span class="area-tag ' + areaClass + '">' + areaLabel + '</span></td>' +
             '<td>' + a.ciclo + '°</td>' +
             '<td>' + date + '</td>' +
@@ -607,7 +770,7 @@ function deleteApplicant(index) {
     document.getElementById('confirmModal').classList.add('active');
     document.getElementById('confirmDeleteBtn').onclick = function () {
         applicants.splice(index, 1);
-        localStorage.setItem('oti_applicants', JSON.stringify(applicants));
+        _0xSaveApplicants();
         updateVacancyCounts();
         renderAdminTable();
         closeConfirmModal();

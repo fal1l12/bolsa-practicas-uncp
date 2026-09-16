@@ -960,6 +960,29 @@ body {
     gap: 8px;
 }
 
+/* CAPTCHA */
+.captcha-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.captcha-container .g-recaptcha {
+    transform: scale(1);
+    transform-origin: center;
+}
+
+/* RATE LIMIT */
+.rate-limit-info {
+    text-align: center;
+    font-size: 13px;
+    color: var(--uncp-text-light);
+    margin-top: 15px;
+    padding: 10px;
+    background: var(--uncp-light);
+    border-radius: 8px;
+}
+
 /* FILE UPLOAD */
 .file-upload {
     border: 2px dashed var(--uncp-border);

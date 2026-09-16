@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://unpkg.com; img-src 'self' data: https:; connect-src 'self' https://discord.com https://www.google.com; font-src 'self' https://cdnjs.cloudflare.com;">
     <title>Convocatoria OTI UNCP Prácticas 2026 | Prácticas Preprofesionales Ingeniería de Sistemas</title>
     <meta name="description" content="Convocatoria oficial de prácticas preprofesionales OTI UNCP 2026. Postula a Soporte Técnico, Redes y Desarrollo de Software en la Universidad Nacional del Centro del Perú.">
     <meta name="keywords" content="prácticas preprofesionales UNCP, convocatoria OTI UNCP, prácticas ingeniería de sistemas Huancayo, empleo universitario Perú, pasantías tecnología UNCP 2026">
@@ -25,6 +26,7 @@
     <meta name="twitter:description" content="Postula a prácticas preprofesionales en la OTI UNCP. Soporte Técnico, Redes y Desarrollo de Software.">
     <meta name="twitter:image" content="https://fal1l12.github.io/bolsa-practicas-uncp/assets/img/logo-uncp.png">
 
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -405,12 +407,20 @@
                         <span class="error-message" id="error-terminos"></span>
                     </div>
 
+                    <div class="form-group">
+                        <div class="captcha-container">
+                            <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-callback="onCaptchaSuccess" data-expired-callback="onCaptchaExpired"></div>
+                        </div>
+                        <span class="error-message" id="error-captcha"></span>
+                    </div>
+
                     <button type="submit" class="btn-submit" id="btnSubmit">
                         <span class="btn-text">Enviar Postulación</span>
                         <span class="btn-spinner" style="display:none;">
                             <i class="fas fa-spinner fa-spin"></i> Procesando...
                         </span>
                     </button>
+                    <div class="rate-limit-info" id="rateLimitInfo"></div>
                 </form>
             </div>
         </section>
